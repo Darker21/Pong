@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Components.ConsoleApp", "Darker.Games.Pong\Components.ConsoleApp.csproj", "{467DB5DB-356A-4A14-8232-8E2A882DCD64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Components.Model", "Components.Model\Components.Model.csproj", "{D847369C-99BD-45C1-8084-8C0A14B24FA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Components.Model", "Components.Model\Components.Model.csproj", "{5C69810C-63D4-4554-91EA-275BB22F0E40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{467DB5DB-356A-4A14-8232-8E2A882DCD64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{467DB5DB-356A-4A14-8232-8E2A882DCD64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{467DB5DB-356A-4A14-8232-8E2A882DCD64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D847369C-99BD-45C1-8084-8C0A14B24FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D847369C-99BD-45C1-8084-8C0A14B24FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D847369C-99BD-45C1-8084-8C0A14B24FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D847369C-99BD-45C1-8084-8C0A14B24FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C69810C-63D4-4554-91EA-275BB22F0E40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C69810C-63D4-4554-91EA-275BB22F0E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C69810C-63D4-4554-91EA-275BB22F0E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C69810C-63D4-4554-91EA-275BB22F0E40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

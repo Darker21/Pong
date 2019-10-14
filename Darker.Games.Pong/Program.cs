@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Components.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,10 @@ namespace Darker.Games.Pong
 {
     class Program
     {
+
         static void Main(string[] args)
         {
+            Game g = new Game();
         }
     }
 }
