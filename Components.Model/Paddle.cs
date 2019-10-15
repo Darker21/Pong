@@ -6,12 +6,25 @@ using System.Threading.Tasks;
 
 namespace Components.Model
 {
-    public class Padel
+    public class Paddle
     {
+        /// <summary>
+        /// The pixels that make up the paddle graphically
+        /// </summary>
         public Pixel[] Pixels;
 
+        /// <summary>
+        /// Stores the score for the paddle
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// Should really be abstracted into a user/player class but they're practically the same thing in Pong
+        /// </remarks>
         public int Score { get; set; }
 
+        /// <summary>
+        /// The XCoordinate of the panel
+        /// </summary>
         public int XCoordinate
         {
             get
@@ -27,13 +40,16 @@ namespace Components.Model
             }
         }
 
+        /// <summary>
+        /// Top of the Paddle objects
+        /// </summary>
         public int Top
         {
             get
             {
                 return Pixels[0].Position.YCoordinate;
             }
-            private set
+            internal set
             {
                 for (int x = 0; x < Pixels.Length; x++)
                 {
@@ -42,6 +58,9 @@ namespace Components.Model
             }
         }
 
+        /// <summary>
+        /// Bottom of the paddle object
+        /// </summary>
         public int Bottom
         {
             get
@@ -57,6 +76,9 @@ namespace Components.Model
             }
         }
 
+        /// <summary>
+        /// Difference of the position from the left side of the game area
+        /// </summary>
         public int Left
         {
             get
@@ -72,6 +94,9 @@ namespace Components.Model
             }
         }
 
+        /// <summary>
+        /// Direction the paddle is moving
+        /// </summary>
         public EnumDirection Direction
         {
             get
@@ -87,11 +112,19 @@ namespace Components.Model
             }
         }
 
+        /// <summary>
+        /// The color for the paddle
+        /// </summary>
         public ConsoleColor Color { get { return Pixels[0].Color; } }
 
-        public void Move(EnumDirection direction)
+
+        /// <summary>
+        /// Move the Paddle
+        /// </summary>
+        /// <param name="direction">The direction to move</param>
+        public void Move()
         {
-            switch (direction)
+            switch (Direction)
             {
                 case EnumDirection.North:
                     Top++;
@@ -104,12 +137,12 @@ namespace Components.Model
             }
         }
 
-        public Padel(): this(0, 5)
+        public Paddle(): this(0, 5)
         {
 
         }
 
-        public Padel(int iScore, int iPadelLength)
+        public Paddle(int iScore, int iPadelLength)
         {
             Score = iScore;
             Pixels = new Pixel[iPadelLength];
@@ -120,6 +153,11 @@ namespace Components.Model
             }
         }
 
+        /// <summary>
+        /// Checks if the paddle contains the position
+        /// </summary>
+        /// <param name="vPosition"></param>
+        /// <returns></returns>
         public bool Contains(Vector vPosition)
         {
             foreach (Pixel p in Pixels)

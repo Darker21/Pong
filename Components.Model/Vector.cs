@@ -8,7 +8,14 @@ namespace Components.Model
 {
     public class Vector
     {
+        /// <summary>
+        /// X coordinate relative to the grid
+        /// </summary>
         public int XCoordinate { get; set; }
+
+        /// <summary>
+        /// the Y coordinate relative to the grid
+        /// </summary>
         public int YCoordinate { get; set; }
 
         public Vector() : this(0,0)

@@ -1,5 +1,8 @@
 ﻿namespace Components.Model
 {
+    /// <summary>
+    /// An enumerator for the Directions Possible
+    /// </summary>
     public enum EnumDirection
     {
         Unknown,

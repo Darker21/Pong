@@ -8,10 +8,24 @@ namespace Components.Model
 {
     public class Game
     {
-        Padel Player1 { get; set; }
-        Padel Player2 { get; set; }
+        /// <summary>
+        /// Player1's Padel
+        /// </summary>
+        Paddle Player1 { get; set; }
+
+        /// <summary>
+        /// Player2's Padel
+        /// </summary>
+        Paddle Player2 { get; set; }
+
+        /// <summary>
+        /// The 'ball'
+        /// </summary>
         Pixel Ball { get; set; }
 
+        /// <summary>
+        /// The center relative to the game area
+        /// </summary>
         private Vector _center
         {
             get
@@ -19,9 +33,20 @@ namespace Components.Model
                 return new Vector(Width / 2 + 1, Height / 2 + 1);
             }
         }
+
+        /// <summary>
+        /// The width variable
+        /// </summary>
         private int _width;
+
+        /// <summary>
+        /// The height variable
+        /// </summary>
         private int _height;
 
+        /// <summary>
+        /// The accessor for the _width variable
+        /// </summary>
         public int Width
         {
             get
@@ -37,6 +62,10 @@ namespace Components.Model
                 _width = value;
             }
         }
+
+        /// <summary>
+        /// The accessor for the _height variable
+        /// </summary>
         public int Height
         {
             get
@@ -55,7 +84,15 @@ namespace Components.Model
                 }
             }
         }
+
+        /// <summary>
+        /// The max score which determines the winner
+        /// </summary>
         public int MaxScore { get; set; }
+
+        /// <summary>
+        /// Get's whether the game is over
+        /// </summary>
         public bool GameOver
         {
             get
@@ -64,26 +101,40 @@ namespace Components.Model
             }
         }
 
+        /// <summary>
+        /// The speed of refresh in milliseconds
+        /// </summary>
         public int GameSpeed { get; private set; }
 
-        public Game() : this(70, 32, 11, 75)
+        /// <summary>
+        /// base constructor
+        /// </summary>
+        public Game() : this(70, 32, 11, 100)
         {
 
         }
 
+        /// <summary>
+        /// Constructor to initialize the game
+        /// </summary>
+        /// <param name="iWidth">Width of the playable area</param>
+        /// <param name="iHeight">Height of the playable area</param>
+        /// <param name="iMaxScore">Max score to reach before a player wins</param>
+        /// <param name="iGameSpeed">The game speed in milliseconds</param>
+        /// <param name="bPlay">Whether to play the game straight away (if not, the Play method will need to be utilised)</param>
         public Game(int iWidth, int iHeight, int iMaxScore, int iGameSpeed, bool bPlay = true)
         {
+            // Set the properties
             Width = iWidth;
             Height = iHeight;
             MaxScore = iMaxScore;
             GameSpeed = iGameSpeed;
 
             Ball = new Pixel();
-            Player1 = new Padel();
-            Player2 = new Padel();
-            Ball.Position.XCoordinate = Width / 2 + 1;
-            Ball.Position.YCoordinate = Height / 2 + 1;
+            Player1 = new Paddle();
+            Player2 = new Paddle();
 
+            // Set paddels to be in the center of the y axis
             Player1.Bottom = (Height / 2) + ((Player1.Pixels.Length / 2) + 2);
             Player2.Bottom = (Height / 2) + ((Player1.Pixels.Length / 2) + 2);
 
@@ -98,38 +149,55 @@ namespace Components.Model
 
         public void Play()
         {
+            // Declare the DateTime variables which will be compared for the gamespeed
             DateTime dtLoopStart;
             DateTime dtWaiting;
 
+            // set the console width and height
             Console.WindowHeight = Height + 10;
             Console.WindowWidth = Width;
 
+            // Set the ball to a random start location and direction
             SetRandomBallProperties();
+
+            // Clear the console
             Console.Clear();
+
+            // Ensure black color
             Console.BackgroundColor = ConsoleColor.Black;
+
+            // Set the title of the window
             Console.Title = $"First to: {MaxScore}";
 
+            // enter a do while loop which will continue until 'GameOver' is True
             do
             {
+                // Clear and redraw components
                 Console.Clear();
-                DrawGrid();
-                DrawPadels();
+                DrawRectangle();
+                DrawPaddles();
                 DrawBall();
                 DrawScore();
 
+                // check whether the ball has passed a players paddle
                 if (Ball.Position.XCoordinate < Player1.Left)
                 {
+                    // Increment Player2's score
                     Player2.Score++;
-                    Ball.Position = _center;
+
+                    // Set the ball to a random start location and direction
                     SetRandomBallProperties();
                 }
                 else if (Ball.Position.XCoordinate > Player2.Left)
                 {
+                    // Increment Player1's score
                     Player1.Score++;
-                    Ball.Position = _center;
+
+                    // Set the ball to a random start location and direction
                     SetRandomBallProperties();
                 }
 
+                // If ball touches edge, invert y direction
                 if (Ball.Position.YCoordinate <= 1)
                 {
                     switch (Ball.Direction)
@@ -161,14 +229,13 @@ namespace Components.Model
                     }
                 }
 
-
-
+                // If it's gameover - break
                 if (GameOver)
                 {
-                    continue;
+                    break;
                 }
 
-
+                #region Determine the Ball's future position
                 Vector posBallFuture = new Vector(Ball.Position.XCoordinate, Ball.Position.YCoordinate);
 
                 switch (Ball.Direction)
@@ -196,50 +263,57 @@ namespace Components.Model
                         posBallFuture.XCoordinate--;
                         break;
                 }
+                #endregion
 
+                // Instantiate the DateTime variables which will be compared for the gamespeed
                 dtLoopStart = DateTime.Now;
                 dtWaiting = DateTime.Now;
+
+                // While the difference in time is less that the desired game speed
                 while (dtWaiting.Subtract(dtLoopStart).TotalMilliseconds <= GameSpeed)
                 {
+                    // Refresh the DateTime Waiting to Now
                     dtWaiting = DateTime.Now;
 
+                    // if there is a keyinfo in the input stream
                     if (Console.KeyAvailable)
                     {
-                        // get the key that has been pressed
+                        // get the key that has been pressed and intercept this so it doesn't right to the console
                         ConsoleKeyInfo keyPressed = Console.ReadKey(true);
 
-                        // can't move the opposite way or press multiple directions within the gamespeed time
+                        // Set the respective player's direction based on the key pressed
                         if (keyPressed.Key.Equals(ConsoleKey.UpArrow))
                         {
                             Player2.Direction = EnumDirection.North;
                         }
-                        if (keyPressed.Key.Equals(ConsoleKey.DownArrow))
+                        else if (keyPressed.Key.Equals(ConsoleKey.DownArrow))
                         {
                             Player2.Direction = EnumDirection.South;
                         }
-                        if (keyPressed.Key.Equals(ConsoleKey.W))
+                        else if (keyPressed.Key.Equals(ConsoleKey.W))
                         {
                             Player1.Direction = EnumDirection.North;
                         }
-                        if (keyPressed.Key.Equals(ConsoleKey.S))
+                        else if (keyPressed.Key.Equals(ConsoleKey.S))
                         {
                             Player1.Direction = EnumDirection.South;
                         }
                     }
 
+                    #region check whether it is possible for the player's paddle to move in the desired direction
                     int iBottom = Player1.Bottom;
                     switch (Player1.Direction)
                     {
                         case EnumDirection.South:
                             if (iBottom + 2 < Height)
                             {
-                                Player1.Bottom++;
+                                Player1.Move();
                             }
                             break;
                         case EnumDirection.North:
                             if (iBottom - Player1.Pixels.Length > 0)
                             {
-                                Player1.Bottom--;
+                                Player1.Move();
                             }
                             break;
                     }
@@ -250,17 +324,19 @@ namespace Components.Model
                         case EnumDirection.South:
                             if (iBottom + 2 < Height)
                             {
-                                Player2.Bottom++;
+                                Player2.Move();
                             }
                             break;
                         case EnumDirection.North:
                             if (iBottom - Player2.Pixels.Length > 0)
                             {
-                                Player2.Bottom--;
+                                Player2.Move();
                             }
                             break;
                     }
+                    #endregion
 
+                    #region If the ball reaches a player's paddle - reverse the direction
                     if (Player1.Contains(posBallFuture))
                     {
                         if (Player1.Direction == EnumDirection.North && Ball.Direction == EnumDirection.NorthWest)
@@ -278,10 +354,6 @@ namespace Components.Model
                         else if (Player1.Direction == EnumDirection.South && Ball.Direction == EnumDirection.West)
                         {
                             Ball.Direction = EnumDirection.NorthEast;
-                        }
-                        else if (Player1.Direction == EnumDirection.North && Ball.Direction == EnumDirection.West)
-                        {
-                            Ball.Direction = EnumDirection.SouthEast;
                         }
                         else if (Player1.Direction == EnumDirection.Unknown)
                         {
@@ -320,10 +392,6 @@ namespace Components.Model
                         {
                             Ball.Direction = EnumDirection.NorthWest;
                         }
-                        else if (Player2.Direction == EnumDirection.North && Ball.Direction == EnumDirection.East)
-                        {
-                            Ball.Direction = EnumDirection.SouthWest;
-                        }
                         else if (Player2.Direction == EnumDirection.Unknown)
                         {
                             string sBallDirection = Ball.Direction.ToString();
@@ -342,24 +410,33 @@ namespace Components.Model
                             }
                         }
                     }
+                    #endregion
+
+                    // reset player's directions to stop them from moving infinitely
                     Player1.Direction = EnumDirection.Unknown;
                     Player2.Direction = EnumDirection.Unknown;
                 }
 
+                // Set the ball's position to the future position
                 Ball.Position = posBallFuture;
 
             } while (!GameOver);
 
-            GameOverScreen();
+            // Display GameOverScreen
+            DisplayGameOverScreen();
         }
 
+        /// <summary>
+        /// Draws both players scores underneath the game board
+        /// </summary>
         private void DrawScore()
         {
             Console.SetCursorPosition(0, Height + 5);
-            Console.Write("----\n");
+            Console.WriteLine("----");
             Console.WriteLine($"|{Player1.Score}|");
             Console.WriteLine("----");
 
+            // Draw player2's score on the right-hand side of the screen
             Console.SetCursorPosition(Width - 5, Height + 5);
             Console.Write("----\n");
             Console.SetCursorPosition(Width - 5, Height + 6);
@@ -368,30 +445,54 @@ namespace Components.Model
             Console.Write("----");
         }
 
+        /// <summary>
+        /// Draw the ball object
+        /// </summary>
         private void DrawBall()
         {
+            // Set the foreground color to be green for the ball
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(Ball.Position.XCoordinate, Ball.Position.YCoordinate);
-            Console.Write("■");
+            DrawPixel(Ball);
         }
 
-        private void DrawPadels()
+        /// <summary>
+        /// Draws the players paddles in the respected positions
+        /// </summary>
+        private void DrawPaddles()
         {
             Console.ForegroundColor = Player1.Color;
-            foreach (Pixel p in Player1.Pixels)
-            {
-                Console.SetCursorPosition(p.Position.XCoordinate, p.Position.YCoordinate);
-                Console.Write("■");
-            }
+            DrawPixel(Player1.Pixels);
+
             Console.ForegroundColor = Player2.Color;
-            foreach (Pixel p in Player2.Pixels)
+            DrawPixel(Player2.Pixels);
+        }
+
+        /// <summary>
+        /// Draws pixel objects on the screen
+        /// </summary>
+        /// <param name="apixDraw">An array of pixels to draw</param>
+        private void DrawPixel(Pixel[] apixDraw)
+        {
+            foreach (Pixel p in apixDraw)
             {
-                Console.SetCursorPosition(p.Position.XCoordinate, p.Position.YCoordinate);
-                Console.Write("■");
+                DrawPixel(p);
             }
         }
 
-        private void DrawGrid()
+        /// <summary>
+        /// Draws a pixel object
+        /// </summary>
+        /// <param name="pixDraw">The pixel object to draw</param>
+        private void DrawPixel(Pixel pixDraw)
+        {
+            Console.SetCursorPosition(pixDraw.Position.XCoordinate, pixDraw.Position.YCoordinate);
+            Console.Write(pixDraw.PixelString);
+        }
+
+        /// <summary>
+        /// Draws the 
+        /// </summary>
+        private void DrawRectangle()
         {
             Console.ForegroundColor = ConsoleColor.White;
             for (int i = 0; i < Width; i++)
@@ -411,24 +512,42 @@ namespace Components.Model
             }
         }
 
+        /// <summary>
+        /// Set the ball's direction and start position to be random
+        /// </summary>
         private void SetRandomBallProperties()
         {
+            int iRandDirection;
+            EnumDirection directionRand;
+
+            // new random object
             Random rand = new Random();
-            int iRandDirection = rand.Next(1, ((int[])Enum.GetValues(typeof(EnumDirection))).Length);
-            EnumDirection directionRand = (EnumDirection)iRandDirection;
+
+            int iEnumLength = ((int[])Enum.GetValues(typeof(EnumDirection))).Length;
+
+            // Get a random direction whilst not allowing Unknown, North or South to be used
             do
             {
-                iRandDirection = rand.Next(1, ((int[])Enum.GetValues(typeof(EnumDirection))).Length);
+                // Get a random direction using the integar values of the enumerator
+                iRandDirection = rand.Next(1, iEnumLength);
+                // cast the int to the relevant enumerator value/representation
                 directionRand = (EnumDirection)iRandDirection;
+
             } while (directionRand == EnumDirection.North || directionRand == EnumDirection.South || directionRand == EnumDirection.Unknown);
 
+            // Assign the random direction to the ball object
             Ball.Direction = directionRand;
 
+            // Get a new random Y position
             int iRandY = rand.Next(1, Height);
+            Ball.Position.XCoordinate = _center.XCoordinate;
             Ball.Position.YCoordinate = iRandY;
         }
 
-        private void GameOverScreen()
+        /// <summary>
+        /// Displays the GameOver Screen declaring who is the winner
+        /// </summary>
+        private void DisplayGameOverScreen()
         {
             // Write the gameover message in the middle of the screen
             Console.SetCursorPosition(Width / 5, Height / 2);
