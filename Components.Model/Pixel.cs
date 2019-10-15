@@ -13,5 +13,12 @@ namespace Components.Model
         public EnumDirection Direction { get; set; }
 
         public ConsoleColor Color { get; set; }
+
+        public Pixel()
+        {
+            Position = new Vector();
+            Direction = EnumDirection.Unknown;
+            Color = ConsoleColor.White;
+        }
     }
 }

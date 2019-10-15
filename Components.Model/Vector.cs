@@ -11,6 +11,16 @@ namespace Components.Model
         public int XCoordinate { get; set; }
         public int YCoordinate { get; set; }
 
+        public Vector() : this(0,0)
+        {
+        }
+
+        public Vector(int iX, int iY)
+        {
+            YCoordinate = iY;
+            XCoordinate = iX;
+        }
+
         /// <summary>
         /// Returns whether both vectors are the same
         /// </summary>
