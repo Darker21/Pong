@@ -104,7 +104,7 @@ namespace Components.Model
             Console.WindowHeight = Height + 10;
             Console.WindowWidth = Width;
 
-            SetRandomStartDirection();
+            SetRandomBallProperties();
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Title = $"First to: {MaxScore}";
@@ -121,13 +121,13 @@ namespace Components.Model
                 {
                     Player2.Score++;
                     Ball.Position = _center;
-                    SetRandomStartDirection();
+                    SetRandomBallProperties();
                 }
                 else if (Ball.Position.XCoordinate > Player2.Left)
                 {
                     Player1.Score++;
                     Ball.Position = _center;
-                    SetRandomStartDirection();
+                    SetRandomBallProperties();
                 }
 
                 if (Ball.Position.YCoordinate <= 1)
@@ -263,11 +263,11 @@ namespace Components.Model
 
                     if (Player1.Contains(posBallFuture))
                     {
-                        if (Player1.Direction == EnumDirection.North && Ball.Direction == EnumDirection.SouthWest)
+                        if (Player1.Direction == EnumDirection.North && Ball.Direction == EnumDirection.NorthWest)
                         {
                             Ball.Direction = EnumDirection.East;
                         }
-                        else if (Player1.Direction == EnumDirection.South && Ball.Direction == EnumDirection.NorthWest)
+                        else if (Player1.Direction == EnumDirection.South && Ball.Direction == EnumDirection.SouthWest)
                         {
                             Ball.Direction = EnumDirection.East;
                         }
@@ -304,11 +304,11 @@ namespace Components.Model
 
                     if (Player2.Contains(posBallFuture))
                     {
-                        if (Player2.Direction == EnumDirection.North && Ball.Direction == EnumDirection.SouthEast)
+                        if (Player2.Direction == EnumDirection.North && Ball.Direction == EnumDirection.NorthEast)
                         {
                             Ball.Direction = EnumDirection.West;
                         }
-                        else if (Player2.Direction == EnumDirection.South && Ball.Direction == EnumDirection.NorthEast)
+                        else if (Player2.Direction == EnumDirection.South && Ball.Direction == EnumDirection.SouthEast)
                         {
                             Ball.Direction = EnumDirection.West;
                         }
@@ -411,18 +411,21 @@ namespace Components.Model
             }
         }
 
-        private void SetRandomStartDirection()
+        private void SetRandomBallProperties()
         {
-            Random randDirection = new Random();
-            int iRandDirection = randDirection.Next(1, ((int[])Enum.GetValues(typeof(EnumDirection))).Length);
+            Random rand = new Random();
+            int iRandDirection = rand.Next(1, ((int[])Enum.GetValues(typeof(EnumDirection))).Length);
             EnumDirection directionRand = (EnumDirection)iRandDirection;
             do
             {
-                iRandDirection = randDirection.Next(1, ((int[])Enum.GetValues(typeof(EnumDirection))).Length);
+                iRandDirection = rand.Next(1, ((int[])Enum.GetValues(typeof(EnumDirection))).Length);
                 directionRand = (EnumDirection)iRandDirection;
             } while (directionRand == EnumDirection.North || directionRand == EnumDirection.South || directionRand == EnumDirection.Unknown);
 
             Ball.Direction = directionRand;
+
+            int iRandY = rand.Next(1, Height);
+            Ball.Position.YCoordinate = iRandY;
         }
 
         private void GameOverScreen()
