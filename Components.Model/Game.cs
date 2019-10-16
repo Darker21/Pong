@@ -8,6 +8,9 @@ namespace Components.Model
 {
     public class Game
     {
+        private int _iSpeed;
+        private int _iScore;
+
         /// <summary>
         /// Player1's Padel
         /// </summary>
@@ -88,7 +91,24 @@ namespace Components.Model
         /// <summary>
         /// The max score which determines the winner
         /// </summary>
-        public int MaxScore { get; set; }
+        public int MaxScore
+        {
+            get
+            {
+                return _iScore;
+            }
+            set
+            {
+                if (value <= 0)
+                {
+                    _iScore = 1;
+                }
+                else
+                {
+                    _iScore = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Get's whether the game is over
@@ -104,7 +124,29 @@ namespace Components.Model
         /// <summary>
         /// The speed of refresh in milliseconds
         /// </summary>
-        public int GameSpeed { get; private set; }
+        public int GameSpeed
+        {
+            get
+            {
+                return _iSpeed;
+            }
+            set
+            {
+                // don't allow the game to be too slow or fast
+                if (value < 75)
+                {
+                    _iSpeed = 75;
+                }
+                else if (value > 200)
+                {
+                    _iSpeed = 200;
+                }
+                else
+                {
+                    _iSpeed = value;
+                }
+            }
+        }
 
         /// <summary>
         /// base constructor
