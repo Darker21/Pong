@@ -115,7 +115,20 @@ namespace Components.Model
         /// <summary>
         /// The color for the paddle
         /// </summary>
-        public ConsoleColor Color { get { return Pixels[0].Color; } }
+        public ConsoleColor Color
+        {
+            get
+            {
+                return Pixels[0].Color;
+            }
+            set
+            {
+                foreach (Pixel p in Pixels)
+                {
+                    p.Color = value;
+                }
+            }
+        }
 
 
         /// <summary>
@@ -127,10 +140,10 @@ namespace Components.Model
             switch (Direction)
             {
                 case EnumDirection.North:
-                    Top++;
+                    Top--;
                     break;
                 case EnumDirection.South:
-                    Top--;
+                    Top++;
                     break;
                 default:
                     break;

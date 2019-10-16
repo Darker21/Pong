@@ -11,17 +11,17 @@ namespace Components.Model
         /// <summary>
         /// Player1's Padel
         /// </summary>
-        Paddle Player1 { get; set; }
+        public Paddle Player1 { get; set; }
 
         /// <summary>
         /// Player2's Padel
         /// </summary>
-        Paddle Player2 { get; set; }
+        public Paddle Player2 { get; set; }
 
         /// <summary>
         /// The 'ball'
         /// </summary>
-        Pixel Ball { get; set; }
+        public Pixel Ball { get; set; }
 
         /// <summary>
         /// The center relative to the game area
@@ -110,6 +110,15 @@ namespace Components.Model
         /// base constructor
         /// </summary>
         public Game() : this(70, 32, 11, 100)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor for whether the game should start playing
+        /// </summary>
+        /// <param name="bPlay"></param>
+        public Game(bool bPlay) : this(70, 32, 11, 100, bPlay)
         {
 
         }
@@ -275,13 +284,13 @@ namespace Components.Model
                     // Refresh the DateTime Waiting to Now
                     dtWaiting = DateTime.Now;
 
-                    // if there is a keyinfo in the input stream
+                    // if there is a keyinfo object in the input stream
                     if (Console.KeyAvailable)
                     {
                         // get the key that has been pressed and intercept this so it doesn't right to the console
                         ConsoleKeyInfo keyPressed = Console.ReadKey(true);
 
-                        // Set the respective player's direction based on the key pressed
+                        // Set the respective player's direction based on the key pressed or pauses the game
                         if (keyPressed.Key.Equals(ConsoleKey.UpArrow))
                         {
                             Player2.Direction = EnumDirection.North;
@@ -297,6 +306,14 @@ namespace Components.Model
                         else if (keyPressed.Key.Equals(ConsoleKey.S))
                         {
                             Player1.Direction = EnumDirection.South;
+                        }
+                        else if (keyPressed.Key.Equals(ConsoleKey.P))
+                        {
+                            Pause();
+                        }
+                        else if (keyPressed.Key.Equals(ConsoleKey.Escape))
+                        {
+                            Environment.Exit(0);
                         }
                     }
 
@@ -427,10 +444,42 @@ namespace Components.Model
         }
 
         /// <summary>
+        /// Pauses the game state
+        /// </summary>
+        private void Pause()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetCursorPosition(_center.XCoordinate - 4, Height + 6);
+            Console.Write("Paused!");
+
+            // Continue looping
+            while (true)
+            {
+                // if there is a keyinfo object in the input stream
+                if (Console.KeyAvailable)
+                {
+                    // get the key that has been pressed and intercept this so it doesn't right to the console
+                    ConsoleKeyInfo keyPressed = Console.ReadKey(true);
+
+                    // Break if the user has unpaused the game
+                    if (keyPressed.Key.Equals(ConsoleKey.P))
+                    {
+                        break;
+                    }
+                    else if (keyPressed.Key.Equals(ConsoleKey.Escape))
+                    {
+                        Environment.Exit(0);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Draws both players scores underneath the game board
         /// </summary>
         private void DrawScore()
         {
+            Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(0, Height + 5);
             Console.WriteLine("----");
             Console.WriteLine($"|{Player1.Score}|");
@@ -451,7 +500,7 @@ namespace Components.Model
         private void DrawBall()
         {
             // Set the foreground color to be green for the ball
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = Ball.Color;
             DrawPixel(Ball);
         }
 
