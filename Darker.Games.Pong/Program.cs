@@ -18,6 +18,8 @@ namespace Darker.Games.Pong
 
         static void Main(string[] args)
         {
+            Console.Title = "Ping...Pong";
+
             // Set the game properties 
             SetGameProperties();
 
@@ -94,7 +96,7 @@ namespace Darker.Games.Pong
             string sSpeed = Console.ReadLine();
 
             // user has entered an incorrect int - ask them to reenter a valid speed
-            while (!int.TryParse(sSpeed, out _iGameSpeed))
+            while (!string.IsNullOrEmpty(sSpeed) && !int.TryParse(sSpeed, out _iGameSpeed))
             {
                 Console.WriteLine("Invalid speed! Please try again. Enter a speed:");
                 sSpeed = Console.ReadLine();
@@ -105,7 +107,7 @@ namespace Darker.Games.Pong
             Console.WriteLine("Please enter a max score (Default: 11):");
             string sScore = Console.ReadLine();
 
-            while (!int.TryParse(sScore, out _iMaxScore))
+            while (!string.IsNullOrEmpty(sScore) && !int.TryParse(sScore, out _iMaxScore))
             {
                 Console.WriteLine("Invalid score! Please try again. Enter a max score:");
                 sScore = Console.ReadLine();

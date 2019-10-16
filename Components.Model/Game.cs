@@ -225,7 +225,7 @@ namespace Components.Model
             {
                 // Clear and redraw components
                 Console.Clear();
-                DrawRectangle();
+                DrawPlayArea();
                 DrawPaddles();
                 DrawBall();
                 DrawScore();
@@ -581,9 +581,9 @@ namespace Components.Model
         }
 
         /// <summary>
-        /// Draws the 
+        /// Draws the play area
         /// </summary>
-        private void DrawRectangle()
+        private void DrawPlayArea()
         {
             Console.ForegroundColor = ConsoleColor.White;
             for (int i = 0; i < Width; i++)
@@ -599,6 +599,9 @@ namespace Components.Model
                 Console.SetCursorPosition(0, i);
                 Console.Write("|");
                 Console.SetCursorPosition(Width - 1, i);
+                Console.Write("|");
+                if (i == 0 || i == Height - 1) { continue; }
+                Console.SetCursorPosition(_center.XCoordinate, i);
                 Console.Write("|");
             }
         }
